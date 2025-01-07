@@ -23,9 +23,9 @@ const ProductTable = () => {
         setLoading(true);
         const response = await DashboardService.getAllProductsDashboard(page, size);
       
-        const { content, totalElements } = response.data; // Destructure data
-        setProducts(content); // Set content as products
-        setTotalElements(totalElements); // Set the total number of products
+        const { content, totalElements } = response.data;
+        setProducts(content);
+        setTotalElements(totalElements);
       } catch (error) {
         console.error("Error fetching data:", error.message);
       } finally {
@@ -54,7 +54,7 @@ const ProductTable = () => {
       <DataGrid
         rows={products}
         columns={[
-          { field: "productId", headerName: "ID", width: 100 },
+          { field: "productId", headerName: "ID", width: 80 },
           { field: "supplierId", headerName: "Supplier ID", width: 150 },
           { field: "name", headerName: "Name", width: 150 },
           { field: "categoryName", headerName: "Category", width: 150 },
@@ -67,8 +67,8 @@ const ProductTable = () => {
         pagination
         onPageChange={(newPage) => setPage(newPage)}
         onPageSizeChange={(newPageSize) => setSize(newPageSize)}
-        page={page} // Ensure the page number is set
-        rowCount={totalElements} // Set the total count for pagination
+        page={page}
+        rowCount={totalElements}
         getRowId={(row) => row.productId}
       />
     </div>

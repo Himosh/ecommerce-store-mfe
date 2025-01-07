@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { FiPackage, FiShoppingBag } from "react-icons/fi";
+import React, { useEffect } from "react";
+import { FiPackage, FiShoppingBag, FiList } from "react-icons/fi";
 import { useNavigate, useLocation } from "react-router-dom";
 import "./Sidebar.css";
 
@@ -7,11 +7,18 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  const isAdmin = user?.role === "ADMIN";
+  const isDataSteward = user?.role === "DATA_STEWARD";
+
   useEffect(() => {
-    if (location.pathname.includes("requests")) {
+    if (location.pathname.includes("dashboard/requests")) {
       setActiveTab("requests");
-    } else if (location.pathname.includes("products")) {
+    } else if (location.pathname.includes("dashboard/products")) {
       setActiveTab("products");
+    } else if (location.pathname.includes("dashboard/orders")) {
+      setActiveTab("orders");
     }
   }, [location.pathname, setActiveTab]);
 
@@ -26,26 +33,42 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
       </div>
       <h2>Seller Portal</h2>
       <nav>
-        <div
-          className={`tab ${activeTab === "requests" ? "active" : ""}`}
-          onClick={() => {
-            setActiveTab("requests");
-            navigate("/requests");
-          }}
-        >
-          <FiShoppingBag className="icon" />
-          Requests
-        </div>
-        <div
-          className={`tab ${activeTab === "products" ? "active" : ""}`}
-          onClick={() => {
-            setActiveTab("products");
-            navigate("/products");
-          }}
-        >
-          <FiPackage className="icon" />
-          Products
-        </div>
+        {(isAdmin || isDataSteward) && (
+          <div
+            className={`tab ${activeTab === "products" ? "active" : ""}`}
+            onClick={() => {
+              setActiveTab("products");
+              navigate("/dashboard/products");
+            }}
+          >
+            <FiPackage className="icon" />
+            Products
+          </div>
+        )}
+        {isAdmin && (
+          <div
+            className={`tab ${activeTab === "requests" ? "active" : ""}`}
+            onClick={() => {
+              setActiveTab("requests");
+              navigate("/dashboard/requests");
+            }}
+          >
+            <FiShoppingBag className="icon" />
+            Requests
+          </div>
+        )}
+        {isAdmin && (
+          <div
+            className={`tab ${activeTab === "orders" ? "active" : ""}`}
+            onClick={() => {
+              setActiveTab("orders");
+              navigate("/dashboard/orders");
+            }}
+          >
+            <FiList className="icon" />
+            Orders
+          </div>
+        )}
       </nav>
     </div>
   );

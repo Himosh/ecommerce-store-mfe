@@ -10,19 +10,16 @@ const ProductRequestTable = ({ activeTab }) => {
   const [size, setSize] = useState(10);
   const [totalElements, setTotalElements] = useState(0);
 
-  // Fetch requests based on active tab, page, and size
   useEffect(() => {
-    if (activeTab === "requests") {
       const fetchRequests = async () => {
         try {
           setLoading(true);
           const response = await DashboardService.getProductCatalogRequests(page, size);
           const { content, totalElements } = response.data;
 
-          // Transform data: ensure `id` is based on `productCatalogRequestId`
           const transformedContent = content.map((item) => ({
             ...item,
-            id: item.id, // Map `id` to `productCatalogRequestId`
+            id: item.id,
           }));
 
           setRequests(transformedContent);
@@ -33,12 +30,9 @@ const ProductRequestTable = ({ activeTab }) => {
           setLoading(false);
         }
       };
-
       fetchRequests();
-    }
-  }, [page, size, activeTab]);
+  }, [page, size]);
 
-  // Handle status change via dropdown
   const handleStatusChange = async (id, status) => {
     try {
       await DashboardService.updateProductRequestStatus([
@@ -92,7 +86,7 @@ const ProductRequestTable = ({ activeTab }) => {
         onPageChange={(newPage) => setPage(newPage)}
         onPageSizeChange={(newPageSize) => setSize(newPageSize)}
         rowCount={totalElements}
-        getRowId={(row) => row.id} // Use the correct ID mapping
+        getRowId={(row) => row.id}
       />
     </div>
   );

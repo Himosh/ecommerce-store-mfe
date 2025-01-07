@@ -2,18 +2,15 @@ import React, { useState } from 'react';
 import './signIn.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { loginUser } from '../../service/auth-service';
-import { useDispatch } from 'react-redux';
-import { setAccessToken } from '../../store/authSlice';
 
 const SignIn = () => {
-  const dispatch = useDispatch();
   const [signinForm, setSigninForm] = useState({
-    email: '',
+    username: '',
     password: '',
   });
 
   const [errors, setErrors] = useState({
-    email: '',
+    username: '',
     password: '',
   });
 
@@ -32,22 +29,22 @@ const SignIn = () => {
   const validateForm = () => {
     let isValid = true;
     const newErrors = {
-      email: '',
+      username: '',
       password: '',
     };
 
-    if (!signinForm.email) {
-      newErrors.email = 'Email is required';
-      isValid = false;
-    } else if (!/\S+@\S+\.\S+/.test(signinForm.email)) {
-      newErrors.email = 'Please enter a valid email';
-      isValid = false;
-    }
+    // if (!signinForm.username) {
+    //   newErrors.username = 'Username is required';
+    //   isValid = false;
+    // } else if (!/\S+@\S+\.\S+/.test(signinForm.username)) {
+    //   newErrors.username = 'Please enter a valid username';
+    //   isValid = false;
+    // }
 
     if (!signinForm.password) {
       newErrors.password = 'Password is required';
       isValid = false;
-    } else if (signinForm.password.length < 6) {
+    } else if (signinForm.password.length < 3) {
       newErrors.password = 'Password must be at least 6 characters';
       isValid = false;
     }
@@ -56,22 +53,20 @@ const SignIn = () => {
     return isValid;
   };
 
-  const setAccessTokenInLocal = (token) => {
-    localStorage.setItem('accessToken', token);
+  const setUserDataInLocal = (user) => {
+    localStorage.setItem('user', JSON.stringify(user));
   };
 
   const onSubmit = async (e) => {
     e.preventDefault();
+
     if (validateForm()) {
       setIsLoading(true);
       setApiError('');
       try {
-        const response = await loginUser(signinForm);
-        dispatch(setAccessToken(response.data.AccessToken));
-        //console.log('Login successful:', response.data.AccessToken);
-        setAccessTokenInLocal(response.data.AccessToken);
-        // alert('Login successful!');
+        const response = await loginUser(signinForm.username, signinForm.password);
         navigate('/product');
+        setUserDataInLocal(response);
       } catch (error) {
         console.error('Login error:', error);
         setApiError(error.message || 'Failed to sign in. Please try again.');
@@ -94,18 +89,16 @@ const SignIn = () => {
         <form onSubmit={onSubmit} className="signin-form">
           <div className="form-group">
             <input
-              type="email"
-              name="email"
-              value={signinForm.email}
+              type="text"
+              name="username"
+              value={signinForm.username}
               onChange={handleChange}
-              placeholder="Email"
+              placeholder="Username"
               className="form-input"
-              aria-label="Email input"
+              aria-label="Username input"
             />
-            {errors.email && (
-              <div className="error-message">
-                {errors.email}
-              </div>
+            {errors.username && (
+              <div className="error-message">{errors.username}</div>
             )}
           </div>
           <div className="form-group">
@@ -119,23 +112,19 @@ const SignIn = () => {
               aria-label="Password input"
             />
             {errors.password && (
-              <div className="error-message">
-                {errors.password}
-              </div>
+              <div className="error-message">{errors.password}</div>
             )}
           </div>
           {apiError && (
-            <div className="api-error-message">
-              {apiError}
-            </div>
+            <div className="api-error-message">{apiError}</div>
           )}
           <button
             type="submit"
             className="signin-button"
             disabled={
-              !signinForm.email ||
+              !signinForm.username ||
               !signinForm.password ||
-              errors.email ||
+              errors.username ||
               errors.password ||
               isLoading
             }

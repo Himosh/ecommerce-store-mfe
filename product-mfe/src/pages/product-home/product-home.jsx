@@ -3,6 +3,7 @@ import './product-home.css';
 import Card from '../../components/product-card/product-card';
 import Header from "../../components/header/header";
 import { getAllProducts, getAllCategories, searchProductsByProductName } from '../../services/product-service';
+import { createCart } from "../../services/cart-service";
 import LoadingScreen from "../../components/loading-screen/loadingScreen";
 import { Link } from "react-router-dom";
 
@@ -16,27 +17,65 @@ function Home() {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
 
+  const userId = JSON.parse(localStorage.getItem("user"))?.id;
+
+  const createCartByUser = async (userId) => {
+    try {
+      const response = await createCart(userId);
+      setCart(response);
+    } catch (error) {
+      console.error("Failed to create cart:", error.message);
+  }
+};
+
+  // const fetchProducts = async (page, category = null, searchQuery = '') => {
+  //   try {
+  //     setLoading(true);
+  //     // createCartByUser(userId);
+  //     let data;
+  //     if (searchQuery) {
+  //       data = await searchProductsByProductName(searchQuery, page, 8); 
+  //     } else {
+  //       data = await getAllProducts(page, 8); 
+  //     }
+  //     const filteredProducts = category
+  //       ? data.content.filter((product) => product.categoryName === category) 
+  //       : data.content;
+  
+  //     setProducts(filteredProducts); 
+  //     setTotalPages(data.totalPages || 1);
+  //   } catch (error) {
+  //     setError(error.message);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
   const fetchProducts = async (page, category = null, searchQuery = '') => {
     try {
       setLoading(true);
       let data;
+      // If there's a search query, call the search API
       if (searchQuery) {
         data = await searchProductsByProductName(searchQuery, page, 8); 
       } else {
+        // Otherwise, fetch all products
         data = await getAllProducts(page, 8); 
       }
+      // If a category is selected, filter by category
       const filteredProducts = category
         ? data.content.filter((product) => product.categoryName === category) 
         : data.content;
   
-      setProducts(filteredProducts); 
-      setTotalPages(data.totalPages || 1);
+      setProducts(filteredProducts);
+      setTotalPages(data.totalPages || 1);  // Adjust totalPages
     } catch (error) {
       setError(error.message);
     } finally {
       setLoading(false);
     }
   };
+  
 
   const fetchCategories = async () => {
     try {
@@ -112,7 +151,7 @@ function Home() {
 
       <div className="product-container">
         {products.map((product) => (
-          <Link key={product.productId} to={`/${product.productId}`}>
+          <Link key={product.productId} to={`/product/${product.productId}`}>
             <Card
               key={product.productId}
               name={product.name}

@@ -12,7 +12,7 @@ import {
 } from "../../services/cart-service";
 import meat from "../../assets/meat.jpg";
 
-const userId = "user123"; // Hardcoded user ID for now.
+const userId = JSON.parse(localStorage.getItem("user"))?.id;
 
 const ProductDescription = () => {
   const { productId } = useParams();
@@ -56,7 +56,7 @@ const ProductDescription = () => {
       setCart(updatedCart);
       console.log("Product added to cart:", updatedCart);
       toast.success("Product added to cart!", { position: "top-right" });
-      navigate("/");
+      navigate("/product");
     } catch {
       toast.error("Failed to add product to cart.", { position: "top-right" });
     }

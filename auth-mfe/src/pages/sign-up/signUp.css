@@ -4,7 +4,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-image: url('./loginbg.jpg');
+  /* background-image: url('./loginbg.jpg'); */
+  background-color: #e2e8f0;
   background-size: cover;
   background-position: center;
   min-height: 100vh;

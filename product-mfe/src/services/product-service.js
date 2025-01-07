@@ -3,16 +3,6 @@ const apiClient = axios.create({
   baseURL: `http://localhost:3000/bff/products`,
 });
 
-// apiClient.interceptors.request.use((config) => {
-//   const token = localStorage.getItem('accessToken');
-//   if (token) {
-//     config.headers.Authorization = `Bearer ${token}`;
-//   }
-//   return config;
-// }, (error) => {
-//   return Promise.reject(error);
-// });
-
 export const getAllProducts = async (page = 0, size = 10) => {
   const response = await apiClient.get('', { params: { page, size } });
   return response.data;
@@ -49,11 +39,11 @@ export const searchProductsByCategoryName = async (categoryName, page = 0, size 
   return response.data;
 };
 
-export const searchProductsByProductName = async (productName, page = 0, size = 10) => {
-  console.log(productName);
-  const response = await apiClient.get('/', { params: { productName, page, size } });
-  return response.data;
-};
+// export const searchProductsByProductName = async (productName, page = 0, size = 10) => {
+//   console.log(productName);
+//   const response = await apiClient.get('/', { params: { productName, page, size } });
+//   return response.data;
+// };
 
 export const submitChangeRequests = async (requestList) => {
   const response = await apiClient.patch('/catalog', requestList);
@@ -84,4 +74,23 @@ export const uploadApprovedProducts = async (file) => {
   });
 
   return response.data;
+};
+
+export const searchProductsByProductName = async (name, page = 0, size = 10) => {
+  try {
+    const response = await axios.post(
+      `http://localhost:8083/api/v1/products/search-product`, 
+      null,
+      {
+        params: { 
+          name,
+          page,
+          size
+        }
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw new Error("Failed to search products: " + error.message);
+  }
 };
