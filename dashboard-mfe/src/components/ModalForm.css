@@ -1,0 +1,99 @@
+/* ModalForm.css */
+.modal-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .modal-container .MuiBox-root {
+    max-width: 600px;
+    width: 100%;
+    padding: 24px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+  .modal-container h2 {
+    margin-bottom: 1.5rem;
+    font-size: 1.6rem;
+    color: #333333;
+    text-align: center;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  /* Arrange fields in a row */
+  .form-row {
+    display: flex;
+    gap: 16px;
+  }
+  
+  /* Flex-grow for inputs in a row to share space equally */
+  .form-row .MuiFormControl-root,
+  .form-row .MuiTextField-root {
+    flex: 1;
+  }
+  
+  /* Input Field Styling */
+  .MuiTextField-root .MuiOutlinedInput-root,
+  .MuiSelect-root .MuiOutlinedInput-root {
+    border-radius: 6px;
+    background-color: #f4f6f8;
+  }
+  
+  .MuiTextField-root .MuiOutlinedInput-input,
+  .MuiSelect-root .MuiOutlinedInput-input {
+    padding: 10px 14px;
+    font-size: 0.95rem;
+    color: #333;
+  }
+  
+  .MuiTextField-root .MuiOutlinedInput-root:hover,
+  .MuiSelect-root .MuiOutlinedInput-root:hover {
+    border-color: #1976d2;
+  }
+  
+  /* Button Styling */
+  button.MuiButton-containedPrimary {
+    background-color: #1976d2;
+    color: white;
+    font-weight: bold;
+    padding: 12px 24px;
+    border-radius: 6px;
+  }
+  
+  button.MuiButton-containedPrimary:hover {
+    background-color: #125ca1;
+  }
+  
+  /* Loader centered in modal */
+  .loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+  
+  /* Responsive Styling */
+  @media screen and (max-width: 600px) {
+    .modal-container .MuiBox-root {
+      padding: 16px;
+      max-width: 95%;
+    }
+  
+    .form-row {
+      flex-direction: column;
+      gap: 12px;
+    }
+  
+    button.MuiButton-containedPrimary {
+      font-size: 0.9rem;
+      padding: 10px 20px;
+    }
+  }
+  

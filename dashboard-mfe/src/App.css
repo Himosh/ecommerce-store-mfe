@@ -1,0 +1,15 @@
+
+h1 {
+  color: #2c3e50;
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+.app {
+  display: flex;
+}
+
+.content {
+  padding: 20px;
+  margin-left: 300px; /* Matches the sidebar's width */
+  width: calc(100% - 300px); /* Adjusts the width to fill the remaining space */
+}
